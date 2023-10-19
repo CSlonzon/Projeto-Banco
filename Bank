@@ -1,0 +1,59 @@
+
+--CONTEXTO: Banco Portugues que deseja vender um produto de emprestimo para seu clientes. A maneira mais eficiente de vender esse produto é via telefone. No entanto, os custos com a operacao sao muito altos. As queries tem por objetivo final identificar clientes e contextos que estejam mais propensos a adquirir o emprestimo.
+
+
+-- 1 QUERY:  Clientes que se inscreveram em um depósito a prazo--
+
+SELECT *
+FROM bank.cliente
+WHERE loan = 'yes';
+
+-- 2 QUERY: Selecionar o trabalho e a média de idade dos clientes que disseram YES para emprestimos a prazo. Tudo isso ordenado pela media de idade descendente--
+
+
+SELECT job, ROUND ( AVG(age), 2) AS avg_age
+FROM bank.cliente
+WHERE y = 'yes'
+GROUP BY job
+ORDER BY avg_age DESC;
+
+--3 QUERY: Quantos clientes se inscreveram em um depósito a prazo
+
+
+SELECT y, COUNT (*) as total_clientes
+FROM bank.cliente
+GROUP BY y;
+
+
+--4 QUERY: Clientes que têm um saldo médio anual (balance) acima de 5.000 euros--
+
+SELECT  balance, *
+FROM bank.cliente
+WHERE balance > 5000
+ORDER BY balance DESC;
+
+--5 QUERY: IDENTIFICAR A idade média dos clientes que se inscreveram em depósitos a prazo--
+
+SELECT ROUND (AVG(age),2) AS idade_media
+FROM bank.cliente
+WHERE y = 'yes';
+
+---6 QUERY: Identificar o mes mais popular para fazer contato----
+
+
+SELECT month, COUNT(*) AS numero_contatos
+FROM bank.cliente
+WHERE contact = 'cellular'
+GROUP BY month
+ORDER BY numero_contatos DESC;
+
+--7 QUERY: quantos clientes têm empréstimos pessoais (loan) e também têm um saldo médio anual (balance) acima de 2.000 euros--
+
+SELECT *
+FROM bank.cliente
+WHERE loan = 'yes' AND balance > 2000;
+
+--8 QUERY: taxa de conversão média de clientes que foram contatados em campanhas anteriores (poutcome diferente de "unknown") e depois se inscreveram em depósitos a prazo------
+
+SELECT ROUND (AVG(CASE WHEN poutcome <> 'unknown' AND y = 'yes' THEN 1 ELSE 0 END),4) taxa_de_conversao_media
+FROM bank.cliente;
